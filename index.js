@@ -41,6 +41,24 @@ app.get("/todos/:id", async (req, res) => {
   }
 });
 
+//update todo
+
+app.put("/todos/:id", async (req, res) => {
+  try {
+    const { id } = req.params; //where
+    const { description } = req.body; //set
+
+    const updateTodo = await pool.query(
+      "UPDATE todo SET description = ($1) WHERE todo_id = ($2)",
+      [description, id]
+    );
+
+    res.json("Updated");
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 app.listen(5000, () => {
   console.log("Listening on port 5000");
 });
