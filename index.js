@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const pool = require("./db");
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); //=> req.body
 
@@ -73,6 +74,6 @@ app.delete("/todos/:id", async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log("Listening on port 5000");
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
