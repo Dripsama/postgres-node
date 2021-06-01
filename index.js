@@ -7,38 +7,47 @@ app.use(express.json()); //=> req.body
 
 //all todos
 app.get("/all", async (req, res) => {
+  var client = await pool.connect();
   try {
-    const allTodos = await pool.query("select * from todo");
+    const allTodos = await client.query("select * from todo");
     res.json(allTodos.rows);
   } catch (err) {
     console.error(err.message);
+  } finally {
+    client.release();
   }
 });
 
 //create todo
 app.post("/todos", async (req, res) => {
+  var client = await pool.connect();
   try {
     const { description } = req.body;
-    const newTodo = await pool.query(
+    const newTodo = await client.query(
       "INSERT INTO todo(description) VALUES ($1) RETURNING *",
       [description]
     );
     res.json(newTodo.rows);
   } catch (err) {
     console.error(err.message);
+  } finally {
+    client.release();
   }
 });
 
 //get by id
 app.get("/todos/:id", async (req, res) => {
+  var client = await pool.connect();
   try {
     const { id } = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = ($1)", [
+    const todo = await client.query("SELECT * FROM todo WHERE todo_id = ($1)", [
       id,
     ]);
     res.json(todo.rows);
   } catch (error) {
     console.error(error.message);
+  } finally {
+    client.release();
   }
 });
 
