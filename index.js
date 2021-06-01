@@ -53,11 +53,12 @@ app.get("/todos/:id", async (req, res) => {
 
 //update todo
 app.put("/todos/:id", async (req, res) => {
+  var client = await pool.connect();
   try {
     const { id } = req.params; //where
     const { description } = req.body; //set
 
-    const updateTodo = await pool.query(
+    const updateTodo = await client.query(
       "UPDATE todo SET description = ($1) WHERE todo_id = ($2)",
       [description, id]
     );
@@ -65,14 +66,17 @@ app.put("/todos/:id", async (req, res) => {
     res.json("Updated");
   } catch (error) {
     console.log(error.message);
+  } finally {
+    client.release();
   }
 });
 
 //delete todo
 app.delete("/todos/:id", async (req, res) => {
+  var client = await pool.connect();
   try {
     const { id } = req.params;
-    const deleteTodo = await pool.query(
+    const deleteTodo = await client.query(
       "DELETE FROM todo WHERE todo_id = ($1)",
       [id]
     );
@@ -80,6 +84,8 @@ app.delete("/todos/:id", async (req, res) => {
     res.json("Deleted");
   } catch (error) {
     console.log(error.message);
+  } finally {
+    client.release();
   }
 });
 
