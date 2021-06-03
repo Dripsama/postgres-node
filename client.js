@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const { Client } = require("pg");
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); //=> req.body
 
@@ -31,6 +32,6 @@ app.get("/all", async (req, res) => {
   res.send({ rows: results.rows, elapsed: elapsed, method: "old" });
 });
 
-app.listen(5000, () => {
-  console.log("Listening on port 5000");
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
