@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { Client } = require("pg");
 const PORT = process.env.PORT || 5000;
+require("dotenv").config();
 
 app.use(express.json()); //=> req.body
 
@@ -10,11 +11,11 @@ app.get("/all", async (req, res) => {
   const fromDate = new Date();
 
   const client = new Client({
-    host: "localhost",
-    port: 5432,
-    user: "postgres",
-    password: "postgres",
-    database: "test",
+    user: process.env.PG_USER,
+    password: process.env.PG_PASSWORD,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    port: process.env.PG_PORT,
   });
 
   //connect
